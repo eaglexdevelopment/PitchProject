@@ -1,0 +1,345 @@
+.container {
+  min-height: 100vh;
+  background: #030014;
+  color: #e2e8f0;
+  font-family: 'Space Grotesk', 'Inter', -apple-system, monospace;
+  overflow-x: hidden;
+  position: relative;
+}
+
+/* Background Cyber Grid */
+.container::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 800px;
+  background-image: 
+    linear-gradient(to right, rgba(139, 92, 246, 0.08) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(6, 182, 212, 0.08) 1px, transparent 1px);
+  background-size: 40px 40px;
+  mask-image: radial-gradient(ellipse at top, rgba(0,0,0,1) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+/* 1. Header */
+.navbar {
+  border-bottom: 1px solid rgba(139, 92, 246, 0.2);
+  background: rgba(3, 0, 20, 0.85);
+  backdrop-filter: blur(16px);
+  position: sticky;
+  top: 0;
+  z-index: 50;
+}
+
+.navInner {
+  max-width: 1240px;
+  margin: 0 auto;
+  padding: 1.1rem 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.brandLogo {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  text-decoration: none;
+  font-size: 1.35rem;
+  font-weight: 800;
+  color: #ffffff;
+  letter-spacing: -0.02em;
+}
+
+.logoPulse {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: #06b6d4;
+  box-shadow: 0 0 12px #06b6d4, 0 0 24px #06b6d4;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0% { transform: scale(0.95); opacity: 0.8; }
+  50% { transform: scale(1.3); opacity: 1; }
+  100% { transform: scale(0.95); opacity: 0.8; }
+}
+
+.navLinks {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.navLink {
+  color: #94a3b8;
+  text-decoration: none;
+  font-size: 0.88rem;
+  font-weight: 600;
+  transition: color 0.2s;
+}
+
+.navLink:hover {
+  color: #06b6d4;
+  text-shadow: 0 0 10px rgba(6, 182, 212, 0.5);
+}
+
+.navCta {
+  background: linear-gradient(135deg, #7c3aed 0%, #06b6d4 100%);
+  color: #ffffff;
+  padding: 0.55rem 1.25rem;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  text-decoration: none;
+  box-shadow: 0 0 20px rgba(124, 58, 237, 0.4);
+  transition: all 0.2s;
+}
+
+.navCta:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 0 30px rgba(6, 182, 212, 0.6);
+}
+
+/* 2. Hero Section */
+.heroSection {
+  max-width: 1240px;
+  margin: 4.5rem auto;
+  padding: 0 1.5rem;
+  text-align: center;
+  position: relative;
+  z-index: 1;
+}
+
+.heroChip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.35rem 0.9rem;
+  border-radius: 999px;
+  background: rgba(124, 58, 237, 0.15);
+  border: 1px solid rgba(124, 58, 237, 0.4);
+  color: #c084fc;
+  font-size: 0.8rem;
+  font-weight: 700;
+  margin-bottom: 1.5rem;
+}
+
+.heroTitle {
+  font-size: 4.2rem;
+  font-weight: 900;
+  line-height: 1.08;
+  letter-spacing: -0.04em;
+  max-width: 950px;
+  margin: 0 auto 1.5rem auto;
+  background: linear-gradient(180deg, #ffffff 0%, #cbd5e1 50%, #94a3b8 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.neonGradient {
+  background: linear-gradient(135deg, #c084fc 0%, #38bdf8 50%, #34d399 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.heroDesc {
+  font-size: 1.2rem;
+  color: #94a3b8;
+  max-width: 700px;
+  margin: 0 auto 3rem auto;
+  line-height: 1.6;
+}
+
+/* 3. Interactive Neural Terminal */
+.terminalContainer {
+  max-width: 950px;
+  margin: 0 auto 6rem auto;
+  background: #08031a;
+  border: 1px solid rgba(139, 92, 246, 0.35);
+  border-radius: 14px;
+  box-shadow: 0 0 50px rgba(124, 58, 237, 0.25), 0 25px 60px rgba(0, 0, 0, 0.8);
+  overflow: hidden;
+  text-align: left;
+}
+
+.terminalHeader {
+  background: #0d0628;
+  padding: 0.75rem 1.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid rgba(139, 92, 246, 0.2);
+}
+
+.terminalDots {
+  display: flex;
+  gap: 6px;
+}
+
+.dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}
+
+.terminalTitle {
+  font-size: 0.8rem;
+  font-family: monospace;
+  color: #a78bfa;
+}
+
+.terminalBody {
+  padding: 1.75rem;
+  font-family: 'Fira Code', monospace;
+}
+
+.promptInputRow {
+  display: flex;
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+}
+
+.terminalInput {
+  flex: 1;
+  background: #04010f;
+  border: 1px solid #2e1065;
+  border-radius: 8px;
+  padding: 0.85rem 1rem;
+  color: #38bdf8;
+  font-family: inherit;
+  font-size: 0.95rem;
+  outline: none;
+}
+
+.terminalInput:focus {
+  border-color: #06b6d4;
+  box-shadow: 0 0 15px rgba(6, 182, 212, 0.3);
+}
+
+.runBtn {
+  background: linear-gradient(135deg, #7c3aed 0%, #06b6d4 100%);
+  color: #ffffff;
+  border: none;
+  padding: 0.85rem 1.5rem;
+  border-radius: 8px;
+  font-weight: 700;
+  font-family: inherit;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.runBtn:hover {
+  box-shadow: 0 0 25px rgba(6, 182, 212, 0.6);
+}
+
+.promptChips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.chipBtn {
+  background: rgba(139, 92, 246, 0.12);
+  border: 1px solid rgba(139, 92, 246, 0.3);
+  border-radius: 6px;
+  padding: 0.35rem 0.75rem;
+  color: #cbd5e1;
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.chipBtn:hover {
+  background: rgba(6, 182, 212, 0.2);
+  border-color: #06b6d4;
+  color: #38bdf8;
+}
+
+.outputBox {
+  background: #02000a;
+  border: 1px solid #1e1b4b;
+  border-radius: 8px;
+  padding: 1.25rem;
+  font-size: 0.88rem;
+  color: #4ade80;
+  line-height: 1.6;
+  min-height: 120px;
+  white-space: pre-wrap;
+}
+
+/* 4. Telemetry Benchmarks */
+.benchmarksSection {
+  max-width: 1240px;
+  margin: 6rem auto;
+  padding: 0 1.5rem;
+}
+
+.benchmarksGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.5rem;
+}
+
+.benchmarkCard {
+  background: #070318;
+  border: 1px solid rgba(139, 92, 246, 0.25);
+  border-radius: 12px;
+  padding: 2rem 1.5rem;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.25s;
+}
+
+.benchmarkCard:hover {
+  border-color: #06b6d4;
+  box-shadow: 0 0 30px rgba(6, 182, 212, 0.2);
+  transform: translateY(-3px);
+}
+
+.benchmarkVal {
+  font-size: 2.75rem;
+  font-weight: 900;
+  margin-bottom: 0.5rem;
+  background: linear-gradient(135deg, #06b6d4 0%, #a855f7 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.benchmarkLabel {
+  font-size: 0.85rem;
+  color: #94a3b8;
+  font-weight: 600;
+}
+
+/* 5. Footer */
+.footer {
+  border-top: 1px solid rgba(139, 92, 246, 0.2);
+  padding: 3rem 1.5rem;
+  background: #02000a;
+}
+
+.footerInner {
+  max-width: 1240px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.85rem;
+  color: #64748b;
+}
+
+@media (max-width: 900px) {
+  .heroTitle { font-size: 2.75rem; }
+  .benchmarksGrid { grid-template-columns: repeat(2, 1fr); }
+  .promptInputRow { flex-direction: column; }
+  .navLinks { display: none; }
+}

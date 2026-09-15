@@ -1,0 +1,25 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // Check if the current user is the authorized EagleX Administrator
+    function isAdmin() {
+      return request.auth != null && 
+             request.auth.token.email.lower() == 'yash.gupta.11.7.2004@gmail.com';
+    }
+
+    match /pitches/{pitchId} {
+      // 1. Allow public read so clients can view their pitch pages via /p/[slug]
+      allow read: if true;
+
+      // 2. Only the verified EagleX admin can create and delete pitches
+      allow create, delete: if isAdmin();
+
+      // 3. Admin can update everything. Public visitors can only increment the viewsCount.
+      allow update: if isAdmin() || (
+        request.resource.data.diff(resource.data).affectedKeys().hasOnly(['viewsCount'])
+      );
+    }
+  }
+}
