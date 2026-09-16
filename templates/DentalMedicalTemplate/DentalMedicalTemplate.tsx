@@ -122,6 +122,9 @@ export default function DentalMedicalTemplate({ pitch }: TemplateProps) {
   // 1. Hero Mode Switcher State
   const [heroMode, setHeroMode] = useState<'veneers' | 'invisalign' | 'laser'>('veneers');
 
+  // Mobile Drawer Menu State
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
   // 2. Before & After Slider State
   const [sliderPos, setSliderPos] = useState(50);
 
@@ -257,7 +260,7 @@ export default function DentalMedicalTemplate({ pitch }: TemplateProps) {
           </div>
 
           <div className={styles.topLinks}>
-            <span>Mon – Fri: 7:30 AM – 6:30 PM • Sat: 8:30 AM – 3:00 PM</span>
+            <span className={styles.topHours}>Mon – Fri: 7:30 AM – 6:30 PM • Sat: 8:30 AM – 3:00 PM</span>
             <a href={`tel:${phone.replace(/[^0-9]/g, '')}`} className={styles.topPhone}>
               <Icons.Phone /> {phone}
             </a>
@@ -265,13 +268,21 @@ export default function DentalMedicalTemplate({ pitch }: TemplateProps) {
         </div>
       </div>
 
-      {/* 2. Luxury Sticky Navbar */}
+      {/* 2. Luxury Sticky Navbar with Mobile Drawer */}
       <header className={styles.navbar}>
         <div className={styles.navInner}>
           <Link href="#hero" className={styles.brandLogo}>
-            <div className={styles.logoMonogram}>
-              <Icons.ToothSpark />
-            </div>
+            {content.navbar?.logoUrl ? (
+              <img
+                src={content.navbar.logoUrl}
+                alt={brandName}
+                className={styles.customBrandLogoImg}
+              />
+            ) : (
+              <div className={styles.logoMonogram}>
+                <Icons.ToothSpark />
+              </div>
+            )}
             <div className={styles.brandText}>
               <span className={styles.brandName}>{brandName}</span>
               <span className={styles.brandSub}>Aesthetic & Clinical Excellence</span>
@@ -289,10 +300,84 @@ export default function DentalMedicalTemplate({ pitch }: TemplateProps) {
             </ul>
           </nav>
 
-          <a href="#booking" className={styles.navCta}>
-            <Icons.Clock /> {content.navbar?.ctaText || 'Reserve Studio Visit'}
-          </a>
+          <div className={styles.navRightGroup}>
+            <a href="#booking" className={styles.navCta}>
+              <Icons.Clock /> <span>{content.navbar?.ctaText || 'Reserve Studio Visit'}</span>
+            </a>
+
+            <button
+              type="button"
+              className={styles.hamburgerBtn}
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              aria-label="Toggle Navigation Menu"
+            >
+              {mobileMenuOpen ? (
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                  <line x1="18" y1="6" x2="6" y2="18"></line>
+                  <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
+              ) : (
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                  <line x1="3" y1="12" x2="21" y2="12"></line>
+                  <line x1="3" y1="6" x2="21" y2="6"></line>
+                  <line x1="3" y1="18" x2="21" y2="18"></line>
+                </svg>
+              )}
+            </button>
+          </div>
         </div>
+
+        {/* Mobile Slide-Out Drawer */}
+        {mobileMenuOpen && (
+          <div className={styles.mobileDrawerOverlay} onClick={() => setMobileMenuOpen(false)}>
+            <div className={styles.mobileDrawer} onClick={(e) => e.stopPropagation()}>
+              <div className={styles.mobileDrawerHeader}>
+                <div className={styles.brandLogo}>
+                  {content.navbar?.logoUrl ? (
+                    <img
+                      src={content.navbar.logoUrl}
+                      alt={brandName}
+                      className={styles.customBrandLogoImg}
+                    />
+                  ) : (
+                    <div className={styles.logoMonogram}>
+                      <Icons.ToothSpark />
+                    </div>
+                  )}
+                  <div className={styles.brandText}>
+                    <span className={styles.brandName}>{brandName}</span>
+                    <span className={styles.brandSub}>Studio Menu</span>
+                  </div>
+                </div>
+                <button
+                  type="button"
+                  className={styles.drawerCloseBtn}
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  ✕
+                </button>
+              </div>
+
+              <ul className={styles.mobileNavLinks}>
+                <li><a href="#hero" onClick={() => setMobileMenuOpen(false)} className={styles.mobileNavLink}>Experience & Doctor Bio</a></li>
+                <li><a href="#transformations" onClick={() => setMobileMenuOpen(false)} className={styles.mobileNavLink}>Smile Transformations</a></li>
+                <li><a href="#treatments" onClick={() => setMobileMenuOpen(false)} className={styles.mobileNavLink}>Specialties & Tech</a></li>
+                <li><a href="#comfort" onClick={() => setMobileMenuOpen(false)} className={styles.mobileNavLink}>Spa Comfort Menu</a></li>
+                <li><a href="#financing" onClick={() => setMobileMenuOpen(false)} className={styles.mobileNavLink}>0% Financing Estimator</a></li>
+                <li><a href="#faq" onClick={() => setMobileMenuOpen(false)} className={styles.mobileNavLink}>Clinical FAQ</a></li>
+              </ul>
+
+              <div className={styles.mobileDrawerFooter}>
+                <a href={`tel:${phone.replace(/[^0-9]/g, '')}`} className={styles.mobileCallBtn}>
+                  <Icons.Phone /> Call: {phone}
+                </a>
+                <a href="#booking" onClick={() => setMobileMenuOpen(false)} className={styles.mobileBookBtn}>
+                  <Icons.Clock /> {content.navbar?.ctaText || 'Reserve Studio Visit'}
+                </a>
+              </div>
+            </div>
+          </div>
+        )}
       </header>
 
       {/* 3. Hero Section */}
@@ -416,6 +501,12 @@ export default function DentalMedicalTemplate({ pitch }: TemplateProps) {
                 className={styles.doctorImage}
                 priority
               />
+              <div className={styles.doctorCardOverlayBadge}>
+                <div className={styles.starsRowSmall}>
+                  <Icons.Star /><Icons.Star /><Icons.Star /><Icons.Star /><Icons.Star />
+                </div>
+                <span>Top Cosmetic Leader</span>
+              </div>
             </div>
 
             {/* Live Audio Equalizer Testimonial Widget */}
@@ -426,14 +517,14 @@ export default function DentalMedicalTemplate({ pitch }: TemplateProps) {
                 <div className={`${styles.eqBar} ${styles.eqBar3}`}></div>
                 <div className={`${styles.eqBar} ${styles.eqBar4}`}></div>
               </div>
-              <div>
-                <div style={{ fontSize: '0.72rem', color: '#10b981', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.06em' }}>
+              <div className={styles.audioMetaBlock}>
+                <div className={styles.audioTag}>
                   Verified Patient Audio
                 </div>
-                <div style={{ fontSize: '0.85rem', color: '#ffffff', fontWeight: 700 }}>
+                <div className={styles.audioQuote}>
                   {currentHud.quote}
                 </div>
-                <div style={{ fontSize: '0.72rem', color: '#94a3b8' }}>
+                <div className={styles.audioAuthor}>
                   {currentHud.author}
                 </div>
               </div>
@@ -472,7 +563,21 @@ export default function DentalMedicalTemplate({ pitch }: TemplateProps) {
         </div>
 
         <div className={styles.sliderLayout}>
-          <div className={styles.photoComparisonContainer}>
+          <div
+            className={styles.photoComparisonContainer}
+            onPointerDown={(e) => {
+              const rect = e.currentTarget.getBoundingClientRect();
+              const x = e.clientX - rect.left;
+              setSliderPos(Math.round(Math.max(5, Math.min(95, (x / rect.width) * 100))));
+            }}
+            onPointerMove={(e) => {
+              if (e.buttons === 1) {
+                const rect = e.currentTarget.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                setSliderPos(Math.round(Math.max(5, Math.min(95, (x / rect.width) * 100))));
+              }
+            }}
+          >
             <div className={styles.photoAfterLayer}>
               <Image
                 src={afterImg}
@@ -482,12 +587,12 @@ export default function DentalMedicalTemplate({ pitch }: TemplateProps) {
                 className={styles.comparisonImage}
               />
               <div className={`${styles.photoPillLabel} ${styles.labelAfter}`}>
-                After: 8 Porcelain Veneers
+                After: 8 Veneers
               </div>
             </div>
 
             <div className={styles.photoBeforeLayer} style={{ width: `${sliderPos}%` }}>
-              <div style={{ width: '600px', height: '100%', position: 'relative' }}>
+              <div className={styles.beforeInnerWrapper}>
                 <Image
                   src={beforeImg}
                   alt="Before: Discolored and Uneven Teeth"
@@ -497,7 +602,7 @@ export default function DentalMedicalTemplate({ pitch }: TemplateProps) {
                 />
               </div>
               <div className={`${styles.photoPillLabel} ${styles.labelBefore}`}>
-                Before: Staining & Wear
+                Before: Staining
               </div>
             </div>
 
@@ -678,7 +783,7 @@ export default function DentalMedicalTemplate({ pitch }: TemplateProps) {
                   <h3 style={{ fontFamily: 'Playfair Display, serif', fontSize: '1.35rem', fontWeight: 600, color: '#0f172a', marginBottom: '1.5rem', textAlign: 'center' }}>
                     Step 2: When Would You Like to Visit?
                   </h3>
-                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1.25rem', marginBottom: '2.5rem' }}>
+                  <div className={styles.timeSlotsGrid}>
                     {[
                       { label: 'Morning', time: '8:00 AM – 12:00 PM' },
                       { label: 'Afternoon', time: '12:00 PM – 4:00 PM' },
@@ -688,7 +793,7 @@ export default function DentalMedicalTemplate({ pitch }: TemplateProps) {
                         key={idx}
                         className={`${styles.concernBtn} ${preferredTime.includes(slot.label) ? styles.concernBtnActive : ''}`}
                         onClick={() => setPreferredTime(`${slot.label} (${slot.time})`)}
-                        style={{ flexDirection: 'column', alignItems: 'center', textAlign: 'center', padding: '1.5rem 1rem' }}
+                        style={{ flexDirection: 'column', alignItems: 'center', textAlign: 'center', padding: '1.25rem 1rem' }}
                       >
                         <div style={{ color: '#0d9488', marginBottom: '0.5rem' }}><Icons.Clock /></div>
                         <strong style={{ fontSize: '1rem', color: '#0f172a' }}>{slot.label}</strong>
@@ -715,7 +820,7 @@ export default function DentalMedicalTemplate({ pitch }: TemplateProps) {
                     Step 3: Where Should We Send Your Confirmation?
                   </h3>
 
-                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.25rem', marginBottom: '1.5rem' }}>
+                  <div className={styles.funnelFormGrid}>
                     <div>
                       <label style={{ display: 'block', fontSize: '0.8rem', fontWeight: 700, color: '#334155', marginBottom: '0.4rem' }}>
                         Patient Full Name *
@@ -835,7 +940,7 @@ export default function DentalMedicalTemplate({ pitch }: TemplateProps) {
             <div style={{ fontSize: '0.75rem', fontWeight: 800, color: '#38bdf8', letterSpacing: '0.12em', textTransform: 'uppercase', marginBottom: '0.5rem' }}>
               TRANSPARENT PRICING ESTIMATOR
             </div>
-            <h2 style={{ fontFamily: 'Playfair Display, serif', fontSize: '2.4rem', fontWeight: 600, margin: '0 0 1rem 0' }}>
+            <h2 className={styles.financingTitle}>
               0% APR Monthly Financing
             </h2>
             <p style={{ fontSize: '0.92rem', color: '#94a3b8', lineHeight: 1.65, margin: '0 0 2rem 0' }}>
@@ -843,7 +948,7 @@ export default function DentalMedicalTemplate({ pitch }: TemplateProps) {
             </p>
 
             <div>
-              <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.88rem', fontWeight: 700 }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.88rem', fontWeight: 700, flexWrap: 'wrap', gap: '0.25rem' }}>
                 <span>Estimated Procedure Cost:</span>
                 <span style={{ color: '#38bdf8' }}>${calcCost.toLocaleString()}</span>
               </div>
@@ -859,7 +964,7 @@ export default function DentalMedicalTemplate({ pitch }: TemplateProps) {
             </div>
 
             <div>
-              <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.88rem', fontWeight: 700 }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.88rem', fontWeight: 700, flexWrap: 'wrap', gap: '0.25rem' }}>
                 <span>Expected Insurance Benefit:</span>
                 <span style={{ color: '#4ade80' }}>-${calcInsurance.toLocaleString()}</span>
               </div>
@@ -905,7 +1010,7 @@ export default function DentalMedicalTemplate({ pitch }: TemplateProps) {
               ))}
             </div>
 
-            <a href="#booking" className={styles.primaryCtaBtn} style={{ width: '100%', justifyContent: 'center' }}>
+            <a href="#booking" className={styles.financingCtaBtn}>
               Check Pre-Approval With Zero Credit Impact →
             </a>
           </div>
@@ -963,9 +1068,17 @@ export default function DentalMedicalTemplate({ pitch }: TemplateProps) {
         <div className={styles.footerInner}>
           <div>
             <div className={styles.brandLogo} style={{ color: '#ffffff', marginBottom: '1rem' }}>
-              <div className={styles.logoMonogram}>
-                <Icons.ToothSpark />
-              </div>
+              {content.footer?.logoUrl || content.navbar?.logoUrl ? (
+                <img
+                  src={content.footer?.logoUrl || content.navbar?.logoUrl || ''}
+                  alt={brandName}
+                  className={styles.customFooterLogoImg}
+                />
+              ) : (
+                <div className={styles.logoMonogram}>
+                  <Icons.ToothSpark />
+                </div>
+              )}
               <div className={styles.brandText}>
                 <span className={styles.brandName} style={{ color: '#ffffff' }}>{brandName}</span>
                 <span className={styles.brandSub} style={{ color: '#38bdf8' }}>Aesthetic & Clinical Excellence</span>

@@ -15,6 +15,28 @@ interface DemoItem {
 
 const DEMOS: DemoItem[] = [
   {
+    id: 'dental-medical',
+    title: 'Aura Dental & Medical Studio',
+    category: 'Healthcare & Clinical Luxury',
+    badge: 'FLAGSHIP CLINICAL',
+    icon: '🦷',
+    description: 'Awwwards-level clinical luxury with 3D tooth laser scan HUD, interactive before/after transformation slider, and 3-step concierge booking wizard.',
+    color: 'linear-gradient(135deg, #0d9488 0%, #38bdf8 100%)',
+    path: '/demo/dental-medical',
+    sections: ['3D Tooth Laser Scan HUD', 'Before & After Smile Slider', 'Spa Comfort Suite Menu', '0% Financing Calculator', '3-Step Booking Wizard', 'Doctor Bio & Certifications', 'Mobile Drawer Menu'],
+  },
+  {
+    id: 'b2b-wholesale',
+    title: 'BharatB2B Global Manufacturing & Wholesale',
+    category: 'Manufacturing & B2B Wholesale',
+    badge: 'GLOBAL B2B / INDIAMART',
+    icon: '🏭',
+    description: 'Dynamic wholesale & OEM export e-commerce portal with 3D Holo-Dock, material shader shifter, maritime sea radar, 3D container packing simulator, MTC chemical matrix, and direct RFQ dispatch.',
+    color: 'linear-gradient(135deg, #f59e0b 0%, #d97706 50%, #03080f 100%)',
+    path: '/demo/b2b-wholesale',
+    sections: ['3D Holo-Dock & Shaders', '360° Exploded View', 'Live Sea Freight Radar', '3D Container Simulator', 'Certified MTC Matrix', 'Direct Commercial RFQ Form', 'Printable Proforma Invoice'],
+  },
+  {
     id: 'saas',
     title: 'Minimal SaaS / Cloud Tech',
     category: 'Software & Startups',

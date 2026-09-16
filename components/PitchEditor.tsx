@@ -19,6 +19,7 @@ import {
   getTemplateComponent,
 } from '@/templates/registry';
 import ImageCropModal, { AspectRatioType } from '@/components/ImageCropModal';
+import { deleteCloudinaryAssets } from '@/lib/cloudinary';
 import styles from '@/app/admin/pages/editor.module.css';
 
 interface PitchEditorProps {
@@ -87,9 +88,18 @@ export default function PitchEditor({ initialPitch, isEditing = false }: PitchEd
   };
 
   const handleCropSuccess = (uploadedUrl: string) => {
-    const { targetField, targetIndex } = cropModalConfig;
+    const { targetField, targetIndex, initialSrc } = cropModalConfig;
 
-    if (targetField === 'hero.heroImageUrl') {
+    // If an existing Cloudinary image is replaced with a new one, clean up the old asset
+    if (initialSrc && initialSrc.includes('cloudinary.com') && initialSrc !== uploadedUrl) {
+      deleteCloudinaryAssets([initialSrc]);
+    }
+
+    if (targetField === 'navbar.logoUrl') {
+      setContent((prev) => ({ ...prev, navbar: { ...prev.navbar, logoUrl: uploadedUrl } }));
+    } else if (targetField === 'footer.logoUrl') {
+      setContent((prev) => ({ ...prev, footer: { ...prev.footer, logoUrl: uploadedUrl } }));
+    } else if (targetField === 'hero.heroImageUrl') {
       setContent((prev) => ({ ...prev, hero: { ...prev.hero, heroImageUrl: uploadedUrl } }));
     } else if (targetField === 'hero.doctorImageUrl') {
       setContent((prev) => ({ ...prev, hero: { ...prev.hero, doctorImageUrl: uploadedUrl } }));
@@ -107,6 +117,28 @@ export default function PitchEditor({ initialPitch, isEditing = false }: PitchEd
         }
         return { ...prev, testimonials: { ...prev.testimonials, items } };
       });
+    }
+  };
+
+  const handleRemoveImage = (targetField: string, currentUrl?: string) => {
+    if (currentUrl && currentUrl.includes('cloudinary.com')) {
+      deleteCloudinaryAssets([currentUrl]);
+    }
+
+    if (targetField === 'navbar.logoUrl') {
+      setContent((prev) => ({ ...prev, navbar: { ...prev.navbar, logoUrl: '' } }));
+    } else if (targetField === 'footer.logoUrl') {
+      setContent((prev) => ({ ...prev, footer: { ...prev.footer, logoUrl: '' } }));
+    } else if (targetField === 'hero.heroImageUrl') {
+      setContent((prev) => ({ ...prev, hero: { ...prev.hero, heroImageUrl: '' } }));
+    } else if (targetField === 'hero.doctorImageUrl') {
+      setContent((prev) => ({ ...prev, hero: { ...prev.hero, doctorImageUrl: '' } }));
+    } else if (targetField === 'hero.beforeImageUrl') {
+      setContent((prev) => ({ ...prev, hero: { ...prev.hero, beforeImageUrl: '' } }));
+    } else if (targetField === 'hero.afterImageUrl') {
+      setContent((prev) => ({ ...prev, hero: { ...prev.hero, afterImageUrl: '' } }));
+    } else if (targetField === 'hero.clinicImageUrl') {
+      setContent((prev) => ({ ...prev, hero: { ...prev.hero, clinicImageUrl: '' } }));
     }
   };
 
@@ -784,6 +816,63 @@ export default function PitchEditor({ initialPitch, isEditing = false }: PitchEd
                 className={styles.input}
               />
             </div>
+
+            <div className={`${styles.formGroup} ${styles.fullWidth}`}>
+              <label className={styles.label}>Brand Logo PNG (Transparent Background)</label>
+              <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center' }}>
+                <input
+                  type="text"
+                  value={content.navbar.logoUrl || ''}
+                  onChange={(e) =>
+                    setContent({
+                      ...content,
+                      navbar: { ...content.navbar, logoUrl: e.target.value },
+                    })
+                  }
+                  placeholder="https://res.cloudinary.com/... or /images/logo.png"
+                  className={styles.input}
+                />
+                <button
+                  type="button"
+                  onClick={() =>
+                    openCropModalForField(
+                      'navbar.logoUrl',
+                      'Crop & Upload Brand Logo (PNG)',
+                      'free',
+                      content.navbar.logoUrl
+                    )
+                  }
+                  className={styles.saveDraftBtn}
+                  style={{ whiteSpace: 'nowrap', background: '#00d4aa', color: '#04070d', fontWeight: 600 }}
+                >
+                  ✂️ Crop & Upload
+                </button>
+              </div>
+              {content.navbar.logoUrl && (
+                <div style={{ marginTop: '0.5rem', display: 'flex', alignItems: 'center', justifyContent: 'space-between', background: 'rgba(255,255,255,0.03)', padding: '0.5rem 0.75rem', borderRadius: '8px', border: '1px solid rgba(255,255,255,0.08)' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                    <div style={{ width: '44px', height: '44px', background: '#1e293b', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '4px', border: '1px solid #00d4aa' }}>
+                      <img
+                        src={content.navbar.logoUrl}
+                        alt="Logo Preview"
+                        style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'contain' }}
+                      />
+                    </div>
+                    <div>
+                      <div style={{ fontSize: '0.85rem', fontWeight: 600, color: '#f1f5f9' }}>Custom PNG Logo Active</div>
+                      <span style={{ fontSize: '0.75rem', color: '#10b981' }}>✓ Applied across Navbar & Mobile Menu</span>
+                    </div>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => handleRemoveImage('navbar.logoUrl', content.navbar.logoUrl)}
+                    style={{ background: 'rgba(239, 68, 68, 0.15)', border: '1px solid #ef4444', color: '#fca5a5', padding: '0.35rem 0.75rem', borderRadius: '6px', fontSize: '0.78rem', cursor: 'pointer' }}
+                  >
+                    🗑️ Remove Logo
+                  </button>
+                </div>
+              )}
+            </div>
           </div>
         </div>
       )}
@@ -1003,13 +1092,26 @@ export default function PitchEditor({ initialPitch, isEditing = false }: PitchEd
                 </button>
               </div>
               {content.hero.doctorImageUrl && (
-                <div style={{ marginTop: '0.5rem', display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-                  <img
-                    src={content.hero.doctorImageUrl}
-                    alt="Doctor Preview"
-                    style={{ width: '48px', height: '64px', objectFit: 'cover', borderRadius: '8px', border: '1px solid #00d4aa' }}
-                  />
-                  <span style={{ fontSize: '0.78rem', color: '#10b981' }}>✓ Image Linked & Ready</span>
+                <div style={{ marginTop: '0.5rem', display: 'flex', alignItems: 'center', justifyContent: 'space-between', background: 'rgba(255,255,255,0.03)', padding: '0.5rem 0.75rem', borderRadius: '8px', border: '1px solid rgba(255,255,255,0.08)' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                    <img
+                      src={content.hero.doctorImageUrl}
+                      alt="Doctor Preview"
+                      style={{ width: '48px', height: '64px', objectFit: 'cover', borderRadius: '8px', border: '1px solid #00d4aa' }}
+                    />
+                    <div>
+                      <div style={{ fontSize: '0.85rem', fontWeight: 600, color: '#f1f5f9' }}>Doctor Portrait Active</div>
+                      <span style={{ fontSize: '0.75rem', color: '#10b981' }}>✓ Synced & Ready</span>
+                    </div>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => handleRemoveImage('hero.doctorImageUrl', content.hero.doctorImageUrl)}
+                    style={{ background: 'rgba(239, 68, 68, 0.15)', border: '1px solid #ef4444', color: '#fca5a5', padding: '0.35rem 0.75rem', borderRadius: '6px', fontSize: '0.78rem', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '0.3rem' }}
+                    title="Remove and delete from Cloudinary"
+                  >
+                    🗑️ Remove Image
+                  </button>
                 </div>
               )}
             </div>
@@ -1047,13 +1149,22 @@ export default function PitchEditor({ initialPitch, isEditing = false }: PitchEd
                 </button>
               </div>
               {content.hero.beforeImageUrl && (
-                <div style={{ marginTop: '0.5rem', display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-                  <img
-                    src={content.hero.beforeImageUrl}
-                    alt="Before Preview"
-                    style={{ width: '48px', height: '48px', objectFit: 'cover', borderRadius: '8px', border: '1px solid #00d4aa' }}
-                  />
-                  <span style={{ fontSize: '0.78rem', color: '#10b981' }}>✓ Before Photo Loaded</span>
+                <div style={{ marginTop: '0.5rem', display: 'flex', alignItems: 'center', justifyContent: 'space-between', background: 'rgba(255,255,255,0.03)', padding: '0.5rem 0.75rem', borderRadius: '8px', border: '1px solid rgba(255,255,255,0.08)' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                    <img
+                      src={content.hero.beforeImageUrl}
+                      alt="Before Preview"
+                      style={{ width: '48px', height: '48px', objectFit: 'cover', borderRadius: '8px', border: '1px solid #00d4aa' }}
+                    />
+                    <span style={{ fontSize: '0.78rem', color: '#10b981' }}>✓ Loaded</span>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => handleRemoveImage('hero.beforeImageUrl', content.hero.beforeImageUrl)}
+                    style={{ background: 'rgba(239, 68, 68, 0.15)', border: '1px solid #ef4444', color: '#fca5a5', padding: '0.3rem 0.6rem', borderRadius: '6px', fontSize: '0.75rem', cursor: 'pointer' }}
+                  >
+                    🗑️ Remove
+                  </button>
                 </div>
               )}
             </div>
@@ -1090,13 +1201,22 @@ export default function PitchEditor({ initialPitch, isEditing = false }: PitchEd
                 </button>
               </div>
               {content.hero.afterImageUrl && (
-                <div style={{ marginTop: '0.5rem', display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-                  <img
-                    src={content.hero.afterImageUrl}
-                    alt="After Preview"
-                    style={{ width: '48px', height: '48px', objectFit: 'cover', borderRadius: '8px', border: '1px solid #00d4aa' }}
-                  />
-                  <span style={{ fontSize: '0.78rem', color: '#10b981' }}>✓ After Photo Loaded</span>
+                <div style={{ marginTop: '0.5rem', display: 'flex', alignItems: 'center', justifyContent: 'space-between', background: 'rgba(255,255,255,0.03)', padding: '0.5rem 0.75rem', borderRadius: '8px', border: '1px solid rgba(255,255,255,0.08)' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                    <img
+                      src={content.hero.afterImageUrl}
+                      alt="After Preview"
+                      style={{ width: '48px', height: '48px', objectFit: 'cover', borderRadius: '8px', border: '1px solid #00d4aa' }}
+                    />
+                    <span style={{ fontSize: '0.78rem', color: '#10b981' }}>✓ Loaded</span>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => handleRemoveImage('hero.afterImageUrl', content.hero.afterImageUrl)}
+                    style={{ background: 'rgba(239, 68, 68, 0.15)', border: '1px solid #ef4444', color: '#fca5a5', padding: '0.3rem 0.6rem', borderRadius: '6px', fontSize: '0.75rem', cursor: 'pointer' }}
+                  >
+                    🗑️ Remove
+                  </button>
                 </div>
               )}
             </div>
@@ -1134,13 +1254,25 @@ export default function PitchEditor({ initialPitch, isEditing = false }: PitchEd
                 </button>
               </div>
               {content.hero.clinicImageUrl && (
-                <div style={{ marginTop: '0.5rem', display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-                  <img
-                    src={content.hero.clinicImageUrl}
-                    alt="Facility Preview"
-                    style={{ width: '80px', height: '45px', objectFit: 'cover', borderRadius: '8px', border: '1px solid #00d4aa' }}
-                  />
-                  <span style={{ fontSize: '0.78rem', color: '#10b981' }}>✓ Facility Photo Loaded</span>
+                <div style={{ marginTop: '0.5rem', display: 'flex', alignItems: 'center', justifyContent: 'space-between', background: 'rgba(255,255,255,0.03)', padding: '0.5rem 0.75rem', borderRadius: '8px', border: '1px solid rgba(255,255,255,0.08)' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                    <img
+                      src={content.hero.clinicImageUrl}
+                      alt="Facility Preview"
+                      style={{ width: '80px', height: '45px', objectFit: 'cover', borderRadius: '8px', border: '1px solid #00d4aa' }}
+                    />
+                    <div>
+                      <div style={{ fontSize: '0.85rem', fontWeight: 600, color: '#f1f5f9' }}>Clinic Facility Photo</div>
+                      <span style={{ fontSize: '0.75rem', color: '#10b981' }}>✓ Loaded</span>
+                    </div>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => handleRemoveImage('hero.clinicImageUrl', content.hero.clinicImageUrl)}
+                    style={{ background: 'rgba(239, 68, 68, 0.15)', border: '1px solid #ef4444', color: '#fca5a5', padding: '0.35rem 0.75rem', borderRadius: '6px', fontSize: '0.78rem', cursor: 'pointer' }}
+                  >
+                    🗑️ Remove Image
+                  </button>
                 </div>
               )}
             </div>
@@ -1737,6 +1869,63 @@ export default function PitchEditor({ initialPitch, isEditing = false }: PitchEd
                 }
                 className={styles.input}
               />
+            </div>
+
+            <div className={`${styles.formGroup} ${styles.fullWidth}`}>
+              <label className={styles.label}>Footer Logo PNG (Optional override, defaults to Navbar Logo)</label>
+              <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center' }}>
+                <input
+                  type="text"
+                  value={content.footer.logoUrl || ''}
+                  onChange={(e) =>
+                    setContent({
+                      ...content,
+                      footer: { ...content.footer, logoUrl: e.target.value },
+                    })
+                  }
+                  placeholder="https://res.cloudinary.com/... or /images/logo_white.png"
+                  className={styles.input}
+                />
+                <button
+                  type="button"
+                  onClick={() =>
+                    openCropModalForField(
+                      'footer.logoUrl',
+                      'Crop & Upload Footer Logo (PNG)',
+                      'free',
+                      content.footer.logoUrl
+                    )
+                  }
+                  className={styles.saveDraftBtn}
+                  style={{ whiteSpace: 'nowrap', background: '#00d4aa', color: '#04070d', fontWeight: 600 }}
+                >
+                  ✂️ Crop & Upload
+                </button>
+              </div>
+              {content.footer.logoUrl && (
+                <div style={{ marginTop: '0.5rem', display: 'flex', alignItems: 'center', justifyContent: 'space-between', background: 'rgba(255,255,255,0.03)', padding: '0.5rem 0.75rem', borderRadius: '8px', border: '1px solid rgba(255,255,255,0.08)' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                    <div style={{ width: '44px', height: '44px', background: '#09131a', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '4px', border: '1px solid #00d4aa' }}>
+                      <img
+                        src={content.footer.logoUrl}
+                        alt="Footer Logo Preview"
+                        style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'contain' }}
+                      />
+                    </div>
+                    <div>
+                      <div style={{ fontSize: '0.85rem', fontWeight: 600, color: '#f1f5f9' }}>Custom Footer Logo Active</div>
+                      <span style={{ fontSize: '0.75rem', color: '#10b981' }}>✓ Loaded</span>
+                    </div>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => handleRemoveImage('footer.logoUrl', content.footer.logoUrl)}
+                    style={{ background: 'rgba(239, 68, 68, 0.15)', border: '1px solid #ef4444', color: '#fca5a5', padding: '0.35rem 0.75rem', borderRadius: '6px', fontSize: '0.78rem', cursor: 'pointer' }}
+                  >
+                    🗑️ Remove Logo
+                  </button>
+                </div>
+              )}
             </div>
           </div>
         </div>

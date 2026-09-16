@@ -13,6 +13,7 @@ import {
 } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 import { Pitch, PitchContent } from '@/types/pitch';
+import { extractCloudinaryUrlsFromPitch, deleteCloudinaryAssets } from '@/lib/cloudinary';
 
 const PITCHES_COLLECTION = 'pitches';
 
@@ -220,6 +221,19 @@ export async function updatePitch(id: string, data: Partial<Pitch>): Promise<voi
 }
 
 export async function deletePitch(id: string): Promise<void> {
+  try {
+    const pitch = await getPitchById(id);
+    if (pitch && pitch.content) {
+      const cloudinaryUrls = extractCloudinaryUrlsFromPitch(pitch.content);
+      if (cloudinaryUrls.length > 0) {
+        // Asynchronously delete all Cloudinary resources
+        await deleteCloudinaryAssets(cloudinaryUrls);
+      }
+    }
+  } catch (cleanErr) {
+    console.warn('Failed to cleanup Cloudinary assets prior to pitch deletion:', cleanErr);
+  }
+
   const docRef = doc(db, PITCHES_COLLECTION, id);
   await deleteDoc(docRef);
 }
