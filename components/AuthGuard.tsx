@@ -5,7 +5,12 @@ import { useRouter } from 'next/navigation';
 import { onAuthStateChanged } from 'firebase/auth';
 import { auth } from '@/lib/firebase';
 
-const ALLOWED_EMAIL = 'yash.gupta.11.7.2004@GMAIL.COM'.toLowerCase();
+const ALLOWED_ADMIN_EMAILS = [
+  'yash.gupta.11.7.2004@gmail.com',
+  'rishipandey3697@gmail.com',
+  'yashbjp888@gmail.com',
+  'vishalkumar280404@gmail.com',
+].map((e) => e.toLowerCase());
 
 export default function AuthGuard({ children }: { children: React.ReactNode }) {
   const [loading, setLoading] = useState(true);
@@ -16,7 +21,7 @@ export default function AuthGuard({ children }: { children: React.ReactNode }) {
       if (!user) {
         // Not logged in
         router.push('/login');
-      } else if (user.email?.toLowerCase() !== ALLOWED_EMAIL) {
+      } else if (!ALLOWED_ADMIN_EMAILS.includes(user.email?.toLowerCase() || '')) {
         // Logged in, but unauthorized email
         auth.signOut().then(() => {
           router.push('/login?error=unauthorized');

@@ -6,6 +6,13 @@ import { signInWithPopup, GoogleAuthProvider } from 'firebase/auth';
 import { auth } from '@/lib/firebase';
 import styles from './login.module.css';
 
+const ALLOWED_ADMIN_EMAILS = [
+  'yash.gupta.11.7.2004@gmail.com',
+  'rishipandey3697@gmail.com',
+  'yashbjp888@gmail.com',
+  'vishalkumar280404@gmail.com',
+].map((e) => e.toLowerCase());
+
 function LoginForm() {
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
@@ -24,8 +31,8 @@ function LoginForm() {
       const result = await signInWithPopup(auth, provider);
 
       // Verification happens in AuthGuard or here
-      const allowedEmail = 'yash.gupta.11.7.2004@GMAIL.COM'.toLowerCase();
-      if (result.user.email?.toLowerCase() === allowedEmail) {
+      const userEmail = result.user.email?.toLowerCase() || '';
+      if (ALLOWED_ADMIN_EMAILS.includes(userEmail)) {
         router.push('/admin');
       } else {
         await auth.signOut();
