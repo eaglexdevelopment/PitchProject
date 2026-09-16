@@ -1,6 +1,7 @@
 export type PitchStatus = 'draft' | 'published';
 
 export type TemplateId =
+  | 'b2b-wholesale'
   | 'dental-medical'
   | 'apex-agency'
   | 'saas-minimal'
@@ -165,6 +166,7 @@ export interface PitchContent {
   };
   footer: {
     brandName: string;
+    logoUrl?: string;
     description: string;
     copyright: string;
     links: FooterLink[];

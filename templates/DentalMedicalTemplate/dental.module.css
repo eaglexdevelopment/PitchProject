@@ -7,13 +7,14 @@
   font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
   overflow-x: hidden;
   position: relative;
+  width: 100%;
 }
 
 /* 1. Top Concierge Bar */
 .topBar {
   background: #061118;
   color: #ffffff;
-  padding: 0.65rem 1.5rem;
+  padding: 0.65rem 1.25rem;
   font-size: 0.8rem;
   font-weight: 600;
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
@@ -49,6 +50,7 @@
   background: #10b981;
   box-shadow: 0 0 10px #10b981, 0 0 20px #10b981;
   animation: pulse 2s infinite;
+  flex-shrink: 0;
 }
 
 @keyframes pulse {
@@ -65,14 +67,19 @@
   font-size: 0.78rem;
 }
 
+.topHours {
+  display: inline;
+}
+
 .topPhone {
   color: #ffffff;
   text-decoration: none;
   font-weight: 700;
-  display: flex;
+  display: inline-flex;
   align-items: center;
   gap: 0.4rem;
   transition: color 0.2s;
+  white-space: nowrap;
 }
 
 .topPhone:hover {
@@ -84,8 +91,9 @@
   position: sticky;
   top: 0;
   z-index: 50;
-  background: rgba(251, 252, 253, 0.82);
+  background: rgba(251, 252, 253, 0.85);
   backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
   border-bottom: 1px solid rgba(15, 23, 42, 0.06);
   box-shadow: 0 4px 30px rgba(0, 0, 0, 0.02);
 }
@@ -93,10 +101,11 @@
 .navInner {
   max-width: 1280px;
   margin: 0 auto;
-  padding: 1.1rem 1.5rem;
+  padding: 0.9rem 1.5rem;
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 1rem;
 }
 
 .brandLogo {
@@ -105,6 +114,7 @@
   gap: 0.75rem;
   text-decoration: none;
   color: #0f172a;
+  flex-shrink: 0;
 }
 
 .logoMonogram {
@@ -117,6 +127,23 @@
   justify-content: center;
   color: #ffffff;
   box-shadow: 0 4px 16px rgba(13, 148, 136, 0.3);
+  flex-shrink: 0;
+}
+
+.customBrandLogoImg {
+  max-height: 40px;
+  max-width: 140px;
+  object-fit: contain;
+  border-radius: 8px;
+  display: block;
+}
+
+.customFooterLogoImg {
+  max-height: 42px;
+  max-width: 150px;
+  object-fit: contain;
+  border-radius: 8px;
+  display: block;
 }
 
 .brandText {
@@ -130,6 +157,7 @@
   font-weight: 700;
   letter-spacing: -0.01em;
   color: #0f172a;
+  white-space: nowrap;
 }
 
 .brandSub {
@@ -138,12 +166,13 @@
   color: #0d9488;
   letter-spacing: 0.14em;
   text-transform: uppercase;
+  white-space: nowrap;
 }
 
 .navLinks {
   display: flex;
   align-items: center;
-  gap: 2.25rem;
+  gap: 2rem;
   list-style: none;
   margin: 0;
   padding: 0;
@@ -161,10 +190,16 @@
   color: #0d9488;
 }
 
+.navRightGroup {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
 .navCta {
   background: #0f172a;
   color: #ffffff;
-  padding: 0.65rem 1.4rem;
+  padding: 0.65rem 1.35rem;
   border-radius: 999px;
   font-size: 0.85rem;
   font-weight: 700;
@@ -175,6 +210,7 @@
   align-items: center;
   gap: 0.5rem;
   border: 1px solid rgba(255, 255, 255, 0.1);
+  white-space: nowrap;
 }
 
 .navCta:hover {
@@ -183,11 +219,155 @@
   box-shadow: 0 6px 20px rgba(13, 148, 136, 0.4);
 }
 
-/* 3. Hero Section (Awwwards Stage with Aurora Mesh & Rotating Rings) */
+.hamburgerBtn {
+  display: none;
+  background: rgba(15, 23, 42, 0.05);
+  border: 1px solid rgba(15, 23, 42, 0.1);
+  color: #0f172a;
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s;
+  flex-shrink: 0;
+}
+
+.hamburgerBtn:hover {
+  background: rgba(13, 148, 136, 0.1);
+  border-color: #0d9488;
+  color: #0d9488;
+}
+
+/* Mobile Slide-Out Drawer */
+.mobileDrawerOverlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(6, 17, 24, 0.65);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  z-index: 9999;
+  display: flex;
+  justify-content: flex-end;
+  animation: fadeIn 0.2s ease-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.mobileDrawer {
+  width: 85%;
+  max-width: 360px;
+  height: 100%;
+  background: #ffffff;
+  box-shadow: -10px 0 30px rgba(0, 0, 0, 0.2);
+  display: flex;
+  flex-direction: column;
+  padding: 1.5rem;
+  animation: slideDrawer 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  overflow-y: auto;
+}
+
+@keyframes slideDrawer {
+  from { transform: translateX(100%); }
+  to { transform: translateX(0); }
+}
+
+.mobileDrawerHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 1.25rem;
+  border-bottom: 1px solid #f1f5f9;
+  margin-bottom: 1.5rem;
+}
+
+.drawerCloseBtn {
+  background: #f1f5f9;
+  border: none;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  font-size: 1rem;
+  color: #64748b;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.mobileNavLinks {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  flex: 1;
+}
+
+.mobileNavLink {
+  display: block;
+  padding: 0.85rem 1rem;
+  border-radius: 10px;
+  color: #1e293b;
+  font-size: 1rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.15s;
+}
+
+.mobileNavLink:hover {
+  background: rgba(13, 148, 136, 0.08);
+  color: #0d9488;
+}
+
+.mobileDrawerFooter {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid #f1f5f9;
+}
+
+.mobileCallBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.85rem;
+  border-radius: 10px;
+  background: #f1f5f9;
+  color: #0f172a;
+  font-weight: 700;
+  font-size: 0.9rem;
+  text-decoration: none;
+}
+
+.mobileBookBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.9rem;
+  border-radius: 10px;
+  background: linear-gradient(135deg, #0d9488 0%, #0f766e 100%);
+  color: #ffffff;
+  font-weight: 700;
+  font-size: 0.95rem;
+  text-decoration: none;
+  box-shadow: 0 4px 15px rgba(13, 148, 136, 0.35);
+}
+
+/* 3. Hero Section */
 .heroWrapper {
   position: relative;
   overflow: hidden;
   padding-bottom: 2rem;
+  width: 100%;
 }
 
 .auroraMeshBg {
@@ -226,8 +406,8 @@
   margin: 0 auto;
   padding: 4.5rem 1.5rem 5rem 1.5rem;
   display: grid;
-  grid-template-columns: 1.12fr 0.88fr;
-  gap: 4rem;
+  grid-template-columns: 1.1fr 0.9fr;
+  gap: 3.5rem;
   align-items: center;
   position: relative;
   z-index: 1;
@@ -255,13 +435,14 @@
   text-transform: uppercase;
   margin-bottom: 1.5rem;
   width: fit-content;
+  max-width: 100%;
 }
 
 .heroTitle {
   font-family: 'Playfair Display', serif;
-  font-size: 4.1rem;
+  font-size: clamp(2.2rem, 5.2vw, 4.1rem);
   font-weight: 600;
-  line-height: 1.08;
+  line-height: 1.1;
   letter-spacing: -0.02em;
   color: #0f172a;
   margin: 0 0 1.5rem 0;
@@ -283,7 +464,7 @@
 }
 
 .heroDesc {
-  font-size: 1.15rem;
+  font-size: clamp(0.95rem, 1.8vw, 1.15rem);
   color: #475569;
   line-height: 1.7;
   margin: 0 0 2rem 0;
@@ -292,6 +473,7 @@
 
 .modeSwitcherContainer {
   margin-bottom: 2rem;
+  width: 100%;
 }
 
 .modeSwitcherLabel {
@@ -305,12 +487,15 @@
 
 .modeChipsGroup {
   display: inline-flex;
+  flex-wrap: wrap;
+  gap: 4px;
   background: rgba(255, 255, 255, 0.85);
   backdrop-filter: blur(12px);
   border: 1px solid #e2e8f0;
   border-radius: 999px;
   padding: 4px;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03);
+  max-width: 100%;
 }
 
 .modeChip {
@@ -326,6 +511,7 @@
   display: flex;
   align-items: center;
   gap: 0.4rem;
+  white-space: nowrap;
 }
 
 .modeChipActive {
@@ -339,6 +525,7 @@
   align-items: center;
   gap: 1.25rem;
   margin-bottom: 2.75rem;
+  flex-wrap: wrap;
 }
 
 .primaryCtaBtn {
@@ -351,9 +538,13 @@
   text-decoration: none;
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 0.6rem;
   box-shadow: 0 8px 25px rgba(13, 148, 136, 0.38);
   transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  border: none;
+  cursor: pointer;
+  white-space: nowrap;
 }
 
 .primaryCtaBtn:hover {
@@ -373,9 +564,12 @@
   text-decoration: none;
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 0.65rem;
   transition: all 0.2s;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  cursor: pointer;
+  white-space: nowrap;
 }
 
 .secondaryPlayBtn:hover {
@@ -394,15 +588,17 @@
   align-items: center;
   justify-content: center;
   font-size: 0.75rem;
+  flex-shrink: 0;
 }
 
 /* Trust Proof Strip */
 .trustStrip {
   display: flex;
   align-items: center;
-  gap: 2.5rem;
+  gap: 2rem;
   padding-top: 1.75rem;
   border-top: 1px solid rgba(226, 232, 240, 0.8);
+  flex-wrap: wrap;
 }
 
 .trustReviewBlock {
@@ -416,6 +612,18 @@
   align-items: center;
   gap: 3px;
   color: #f59e0b;
+}
+
+.starsRowSmall {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  color: #f59e0b;
+}
+
+.starsRowSmall svg {
+  width: 11px;
+  height: 11px;
 }
 
 .trustLabel {
@@ -433,19 +641,20 @@
   color: #1e293b;
 }
 
-/* Eye-Dropping Doctor Presentation Stage */
+/* Doctor Visual Stage */
 .doctorStage {
   position: relative;
   display: flex;
   justify-content: center;
   align-items: center;
-  min-height: 600px;
+  min-height: 520px;
+  width: 100%;
 }
 
 .radarRing1 {
   position: absolute;
-  width: 520px;
-  height: 520px;
+  width: 500px;
+  height: 500px;
   border-radius: 50%;
   border: 1px dashed rgba(13, 148, 136, 0.25);
   pointer-events: none;
@@ -454,8 +663,8 @@
 
 .radarRing2 {
   position: absolute;
-  width: 600px;
-  height: 600px;
+  width: 580px;
+  height: 580px;
   border-radius: 50%;
   border: 1px solid rgba(56, 189, 248, 0.12);
   pointer-events: none;
@@ -475,13 +684,34 @@
   position: relative;
   z-index: 2;
   width: 100%;
-  max-width: 440px;
-  height: 560px;
-  border-radius: 32px;
+  max-width: 380px;
+  aspect-ratio: 3 / 4;
+  border-radius: 28px;
   overflow: hidden;
-  box-shadow: 0 35px 70px -15px rgba(15, 23, 42, 0.25), 0 0 50px rgba(13, 148, 136, 0.15);
+  box-shadow: 0 30px 60px -15px rgba(15, 23, 42, 0.25), 0 0 40px rgba(13, 148, 136, 0.15);
   border: 4px solid #ffffff;
-  background: #ffffff;
+  background: #09131a;
+}
+
+.doctorCardOverlayBadge {
+  position: absolute;
+  bottom: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(6, 17, 24, 0.85);
+  backdrop-filter: blur(8px);
+  padding: 0.35rem 0.85rem;
+  border-radius: 999px;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  color: #ffffff;
+  font-size: 0.72rem;
+  font-weight: 700;
+  white-space: nowrap;
+  z-index: 4;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
 }
 
 .doctorImage {
@@ -494,25 +724,25 @@
 
 .hudScannerWidget {
   position: absolute;
-  top: 15px;
-  left: -32px;
+  top: 20px;
+  left: -20px;
   z-index: 3;
   background: rgba(255, 255, 255, 0.94);
   backdrop-filter: blur(20px);
-  padding: 1rem 1.25rem;
-  border-radius: 18px;
+  padding: 0.85rem 1.15rem;
+  border-radius: 16px;
   box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.12);
   border: 1px solid rgba(255, 255, 255, 0.8);
   display: flex;
   align-items: center;
-  gap: 0.9rem;
+  gap: 0.8rem;
   animation: floatSlow 4s ease-in-out infinite alternate;
 }
 
 .toothScannerFrame {
   position: relative;
-  width: 42px;
-  height: 48px;
+  width: 40px;
+  height: 44px;
   background: #09131a;
   border-radius: 8px;
   overflow: hidden;
@@ -521,6 +751,7 @@
   justify-content: center;
   color: #38bdf8;
   border: 1px solid rgba(56, 189, 248, 0.4);
+  flex-shrink: 0;
 }
 
 .laserScanline {
@@ -546,7 +777,7 @@
 }
 
 .hudTag {
-  font-size: 0.68rem;
+  font-size: 0.65rem;
   font-weight: 800;
   color: #0d9488;
   letter-spacing: 0.08em;
@@ -554,40 +785,42 @@
 }
 
 .hudValue {
-  font-size: 0.88rem;
+  font-size: 0.85rem;
   font-weight: 800;
   color: #0f172a;
 }
 
 .hudSub {
-  font-size: 0.72rem;
+  font-size: 0.7rem;
   color: #64748b;
   font-weight: 600;
 }
 
 .hudAudioWidget {
   position: absolute;
-  bottom: 30px;
-  right: -32px;
+  bottom: 25px;
+  right: -20px;
   z-index: 3;
   background: #09131a;
   color: #ffffff;
   backdrop-filter: blur(20px);
-  padding: 1rem 1.35rem;
-  border-radius: 18px;
+  padding: 0.85rem 1.15rem;
+  border-radius: 16px;
   box-shadow: 0 25px 50px -10px rgba(0, 0, 0, 0.35);
   border: 1px solid rgba(255, 255, 255, 0.12);
   display: flex;
   align-items: center;
-  gap: 1rem;
+  gap: 0.9rem;
   animation: floatSlow 5s ease-in-out infinite alternate-reverse;
+  max-width: 320px;
 }
 
 .audioEqualizer {
   display: flex;
   align-items: flex-end;
   gap: 3px;
-  height: 24px;
+  height: 22px;
+  flex-shrink: 0;
 }
 
 .eqBar {
@@ -600,14 +833,38 @@
 .eqBar3 { animation: eqBar3 1.4s ease-in-out infinite 0.4s; }
 .eqBar4 { animation: eqBar4 1.1s ease-in-out infinite 0.1s; }
 
-@keyframes eqBar1 { 0%, 100% { height: 4px; } 50% { height: 20px; } }
-@keyframes eqBar2 { 0%, 100% { height: 18px; } 50% { height: 6px; } }
-@keyframes eqBar3 { 0%, 100% { height: 8px; } 50% { height: 24px; } }
-@keyframes eqBar4 { 0%, 100% { height: 22px; } 50% { height: 10px; } }
+@keyframes eqBar1 { 0%, 100% { height: 4px; } 50% { height: 18px; } }
+@keyframes eqBar2 { 0%, 100% { height: 16px; } 50% { height: 5px; } }
+@keyframes eqBar3 { 0%, 100% { height: 6px; } 50% { height: 20px; } }
+@keyframes eqBar4 { 0%, 100% { height: 20px; } 50% { height: 8px; } }
 
 @keyframes floatSlow {
   0% { transform: translateY(0px); }
-  100% { transform: translateY(-10px); }
+  100% { transform: translateY(-8px); }
+}
+
+.audioMetaBlock {
+  display: flex;
+  flex-direction: column;
+}
+
+.audioTag {
+  font-size: 0.72rem;
+  color: #10b981;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.audioQuote {
+  font-size: 0.85rem;
+  color: #ffffff;
+  font-weight: 700;
+}
+
+.audioAuthor {
+  font-size: 0.72rem;
+  color: #94a3b8;
 }
 
 /* 4. Luxury Infinite Trust Ribbon */
@@ -618,6 +875,7 @@
   padding: 0.9rem 0;
   overflow: hidden;
   white-space: nowrap;
+  width: 100%;
 }
 
 .ribbonTrack {
@@ -656,6 +914,7 @@
   border-top: 1px solid #e2e8f0;
   border-bottom: 1px solid #e2e8f0;
   padding: 6.5rem 1.5rem;
+  width: 100%;
 }
 
 .sectionHeader {
@@ -675,15 +934,16 @@
 
 .sectionTitle {
   font-family: 'Playfair Display', serif;
-  font-size: 2.8rem;
+  font-size: clamp(1.9rem, 4.5vw, 2.8rem);
   font-weight: 600;
   letter-spacing: -0.02em;
   color: #0f172a;
   margin: 0 0 1rem 0;
+  line-height: 1.2;
 }
 
 .sectionSub {
-  font-size: 1.05rem;
+  font-size: clamp(0.95rem, 1.8vw, 1.05rem);
   color: #64748b;
   line-height: 1.65;
 }
@@ -692,21 +952,24 @@
   max-width: 1040px;
   margin: 0 auto;
   display: grid;
-  grid-template-columns: 1.25fr 0.75fr;
-  gap: 3.5rem;
+  grid-template-columns: 1.2fr 0.8fr;
+  gap: 3rem;
   align-items: center;
 }
 
 .photoComparisonContainer {
   position: relative;
   width: 100%;
-  height: 420px;
+  aspect-ratio: 16 / 10;
+  max-height: 440px;
   border-radius: 20px;
   overflow: hidden;
-  box-shadow: 0 25px 50px -12px rgba(15, 23, 42, 0.18);
+  box-shadow: 0 20px 50px -15px rgba(15, 23, 42, 0.2);
   border: 4px solid #ffffff;
   user-select: none;
-  background: #000000;
+  cursor: ew-resize;
+  touch-action: pan-y;
+  background: #09131a;
 }
 
 .photoAfterLayer {
@@ -722,7 +985,16 @@
   left: 0;
   bottom: 0;
   overflow: hidden;
-  border-right: 3px solid #ffffff;
+  z-index: 2;
+  border-right: 2px solid #00d4aa;
+}
+
+.beforeInnerWrapper {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
 }
 
 .comparisonImage {
@@ -734,55 +1006,58 @@
 
 .photoPillLabel {
   position: absolute;
-  top: 16px;
+  bottom: 14px;
   padding: 0.35rem 0.85rem;
-  border-radius: 6px;
-  font-size: 0.75rem;
+  border-radius: 999px;
+  font-size: 0.72rem;
   font-weight: 800;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.05em;
   text-transform: uppercase;
-  z-index: 5;
+  z-index: 3;
 }
 
 .labelBefore {
-  left: 16px;
+  left: 14px;
   background: rgba(15, 23, 42, 0.85);
   color: #ffffff;
-  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 .labelAfter {
-  right: 16px;
+  right: 14px;
   background: rgba(13, 148, 136, 0.9);
   color: #ffffff;
-  backdrop-filter: blur(8px);
+  box-shadow: 0 4px 14px rgba(13, 148, 136, 0.4);
 }
 
 .sliderDivider {
   position: absolute;
   top: 0;
   bottom: 0;
-  width: 3px;
+  width: 2px;
   background: #ffffff;
-  cursor: ew-resize;
-  z-index: 10;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  z-index: 4;
+  transform: translateX(-50%);
+  pointer-events: none;
 }
 
 .sliderThumbBtn {
-  width: 40px;
-  height: 40px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 36px;
+  height: 36px;
   border-radius: 50%;
-  background: #ffffff;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.35);
+  background: #00d4aa;
+  color: #04070d;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #0d9488;
   font-weight: 900;
-  border: 2px solid #0d9488;
+  font-size: 1rem;
+  box-shadow: 0 0 20px rgba(0, 212, 170, 0.6);
+  border: 2px solid #ffffff;
 }
 
 .caseStudyCard {
@@ -797,6 +1072,7 @@
   max-width: 1280px;
   margin: 6.5rem auto;
   padding: 0 1.5rem;
+  width: 100%;
 }
 
 .treatmentsGrid {
@@ -810,57 +1086,53 @@
   border: 1px solid #e2e8f0;
   border-radius: 20px;
   padding: 2.25rem;
+  box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.04);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.03);
-  position: relative;
 }
 
 .treatmentCard:hover {
-  transform: translateY(-5px);
+  transform: translateY(-4px);
   border-color: #0d9488;
-  box-shadow: 0 20px 40px -10px rgba(13, 148, 136, 0.12);
+  box-shadow: 0 20px 40px -15px rgba(13, 148, 136, 0.15);
 }
 
 .iconCircle {
   width: 52px;
   height: 52px;
-  border-radius: 12px;
+  border-radius: 14px;
   background: rgba(13, 148, 136, 0.08);
   color: #0d9488;
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-bottom: 1.5rem;
 }
 
 .treatmentDuration {
-  font-size: 0.72rem;
-  font-weight: 800;
+  font-size: 0.75rem;
+  font-weight: 700;
   color: #0d9488;
-  background: rgba(13, 148, 136, 0.08);
-  padding: 0.25rem 0.65rem;
-  border-radius: 6px;
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
+  background: #f0fdfa;
+  padding: 0.3rem 0.75rem;
+  border-radius: 999px;
+  border: 1px solid #ccfbf1;
 }
 
 .treatmentName {
   font-family: 'Playfair Display', serif;
   font-size: 1.35rem;
-  font-weight: 600;
+  font-weight: 700;
   color: #0f172a;
-  margin: 0 0 0.75rem 0;
+  margin: 1.25rem 0 0.65rem 0;
 }
 
 .treatmentDescription {
-  font-size: 0.92rem;
+  font-size: 0.9rem;
   color: #64748b;
-  line-height: 1.65;
-  margin: 0 0 1.5rem 0;
-  flex: 1;
+  line-height: 1.6;
+  margin-bottom: 1.5rem;
 }
 
 .treatmentPoints {
@@ -873,34 +1145,36 @@
 }
 
 .treatmentPoint {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.6rem;
   font-size: 0.85rem;
   color: #334155;
-  display: flex;
-  align-items: center;
-  gap: 0.6rem;
+  line-height: 1.45;
 }
 
 .treatmentCardCta {
-  color: #0d9488;
-  font-weight: 700;
-  font-size: 0.88rem;
-  text-decoration: none;
   display: flex;
   align-items: center;
-  gap: 0.4rem;
-  transition: gap 0.2s;
+  justify-content: space-between;
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: #0d9488;
+  text-decoration: none;
+  transition: color 0.2s;
 }
 
 .treatmentCardCta:hover {
-  gap: 0.65rem;
+  color: #0f766e;
 }
 
-/* 7. Interactive 3-Step Assessment Booking Funnel */
+/* 7. Virtual Smile Assessment Funnel */
 .bookingFunnelSection {
   background: linear-gradient(180deg, #f0fdfa 0%, #e0f2fe 100%);
   border-top: 1px solid #ccfbf1;
   border-bottom: 1px solid #ccfbf1;
   padding: 6.5rem 1.5rem;
+  width: 100%;
 }
 
 .funnelCard {
@@ -932,6 +1206,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  flex-shrink: 0;
 }
 
 .stepDotActive {
@@ -944,6 +1219,7 @@
   height: 3px;
   width: 60px;
   background: #e2e8f0;
+  transition: background 0.25s;
 }
 
 .stepLineActive {
@@ -981,11 +1257,26 @@
   box-shadow: 0 4px 15px rgba(13, 148, 136, 0.15);
 }
 
+.timeSlotsGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.25rem;
+  margin-bottom: 2.5rem;
+}
+
+.funnelFormGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.25rem;
+  margin-bottom: 1.5rem;
+}
+
 /* 8. Spa Comfort Suite */
 .comfortSection {
   max-width: 1280px;
   margin: 6.5rem auto;
   padding: 0 1.5rem;
+  width: 100%;
 }
 
 .comfortGrid {
@@ -1002,6 +1293,7 @@
   height: 460px;
   position: relative;
   border: 4px solid #ffffff;
+  width: 100%;
 }
 
 .comfortPhoto {
@@ -1042,6 +1334,8 @@
   max-width: 1040px;
   margin: 6.5rem auto;
   padding: 0 1.5rem;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .financingCard {
@@ -1054,13 +1348,34 @@
   gap: 3.5rem;
   align-items: center;
   box-shadow: 0 25px 60px -15px rgba(15, 23, 42, 0.4);
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.financingCard > * {
+  min-width: 0;
+  max-width: 100%;
+}
+
+.financingTitle {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(1.6rem, 3.5vw, 2.4rem);
+  font-weight: 600;
+  margin: 0 0 1rem 0;
+  line-height: 1.2;
 }
 
 .calcSlider {
   width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
   accent-color: #0d9488;
   height: 8px;
   margin: 1.5rem 0;
+  cursor: pointer;
+  display: block;
 }
 
 .monthlyPaymentBox {
@@ -1069,14 +1384,46 @@
   border-radius: 20px;
   padding: 2.25rem;
   text-align: center;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  overflow: hidden;
 }
 
 .monthlyAmount {
   font-family: 'Playfair Display', serif;
-  font-size: 3.2rem;
+  font-size: clamp(2.4rem, 5vw, 3.2rem);
   font-weight: 700;
   color: #38bdf8;
   margin: 0.5rem 0;
+}
+
+.financingCtaBtn {
+  background: linear-gradient(135deg, #0d9488 0%, #0f766e 100%);
+  color: #ffffff;
+  padding: 0.9rem 1.25rem;
+  border-radius: 999px;
+  font-size: 0.9rem;
+  font-weight: 700;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  line-height: 1.35;
+  white-space: normal;
+  width: 100%;
+  box-sizing: border-box;
+  box-shadow: 0 8px 25px rgba(13, 148, 136, 0.38);
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  border: none;
+  cursor: pointer;
+  word-break: break-word;
+}
+
+.financingCtaBtn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 30px rgba(13, 148, 136, 0.55);
 }
 
 /* 10. FAQ Section */
@@ -1084,6 +1431,7 @@
   max-width: 840px;
   margin: 6.5rem auto;
   padding: 0 1.5rem;
+  width: 100%;
 }
 
 .faqItem {
@@ -1107,6 +1455,7 @@
   justify-content: space-between;
   align-items: center;
   cursor: pointer;
+  gap: 1rem;
 }
 
 .faqContent {
@@ -1122,6 +1471,7 @@
   color: #ffffff;
   padding: 5rem 1.5rem 2.5rem 1.5rem;
   border-top: 1px solid rgba(255, 255, 255, 0.08);
+  width: 100%;
 }
 
 .footerInner {
@@ -1142,19 +1492,465 @@
   justify-content: space-between;
   font-size: 0.82rem;
   color: #64748b;
+  gap: 1rem;
+  flex-wrap: wrap;
 }
 
-@media (max-width: 960px) {
-  .heroSection { grid-template-columns: 1fr; }
-  .heroTitle { font-size: 2.8rem; }
-  .sliderLayout { grid-template-columns: 1fr; }
-  .treatmentsGrid { grid-template-columns: 1fr; }
-  .comfortGrid { grid-template-columns: 1fr; }
-  .financingCard { grid-template-columns: 1fr; }
-  .concernGrid { grid-template-columns: 1fr; }
-  .footerInner { grid-template-columns: 1fr 1fr; }
-  .navLinks { display: none; }
-  .radarRing1, .radarRing2 { display: none; }
-  .hudScannerWidget { left: 0; }
-  .hudAudioWidget { right: 0; }
+/* ===================================================
+   RESPONSIVE MEDIA QUERIES (TABLET & MOBILE)
+   =================================================== */
+
+/* Tablet Breakpoint (769px - 1024px) */
+@media (max-width: 1024px) {
+  .heroSection {
+    grid-template-columns: 1fr;
+    gap: 3rem;
+    padding: 3.5rem 1.5rem 4rem 1.5rem;
+    text-align: center;
+  }
+
+  .heroLeft {
+    align-items: center;
+  }
+
+  .heroDesc {
+    max-width: 680px;
+  }
+
+  .heroActions {
+    justify-content: center;
+  }
+
+  .trustStrip {
+    justify-content: center;
+  }
+
+  .navLinks {
+    gap: 1.25rem;
+  }
+
+  .navLink {
+    font-size: 0.82rem;
+  }
+
+  .treatmentsGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .sliderLayout {
+    grid-template-columns: 1fr;
+    gap: 2.5rem;
+  }
+
+  .comfortGrid {
+    grid-template-columns: 1fr;
+    gap: 2.5rem;
+  }
+
+  .comfortImageFrame {
+    height: 380px;
+  }
+
+  .financingCard {
+    grid-template-columns: 1fr;
+    gap: 2.5rem;
+    padding: 2.75rem;
+  }
+
+  .footerInner {
+    grid-template-columns: 1fr 1fr;
+    gap: 2.5rem;
+  }
+
+  .radarRing1 { width: 440px; height: 440px; }
+  .radarRing2 { width: 500px; height: 500px; }
+}
+
+/* ===================================================
+   UNIFIED LUXURY HERO FOR MOBILE (<= 860px)
+   =================================================== */
+@media (max-width: 860px) {
+  .navLinks {
+    display: none;
+  }
+
+  .hamburgerBtn {
+    display: flex;
+  }
+
+  .topHours {
+    display: none;
+  }
+
+  /* 1. Unified Mobile Hero Flow */
+  .heroSection {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 1.5rem;
+    padding: 1.75rem 1.25rem 3rem 1.25rem;
+    width: 100%;
+  }
+
+  /* Put Doctor Capsule FIRST at the top of hero on mobile */
+  .doctorStage {
+    order: 1;
+    min-height: auto;
+    width: 100%;
+    max-width: 320px;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0.5rem auto 1.25rem auto;
+    padding: 0.75rem 0;
+  }
+
+  .radarRing1, .radarRing2 {
+    display: none;
+  }
+
+  /* Compact Doctor Arched Glass Medallion */
+  .doctorCardPortal {
+    width: 195px;
+    height: 255px;
+    max-width: 220px;
+    border-radius: 26px;
+    border: 3px solid #ffffff;
+    box-shadow: 0 16px 36px -8px rgba(13, 148, 136, 0.4), 0 0 30px rgba(13, 148, 136, 0.18);
+    position: relative;
+  }
+
+  .doctorCardOverlayBadge {
+    bottom: 8px;
+    padding: 0.22rem 0.65rem;
+    font-size: 0.64rem;
+  }
+
+  /* Pinned Micro Telemetry HUD - Top Left of Doctor */
+  .hudScannerWidget {
+    position: absolute;
+    top: -8px;
+    left: -12px;
+    z-index: 5;
+    background: rgba(255, 255, 255, 0.96);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    padding: 0.4rem 0.7rem;
+    border-radius: 12px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+    border: 1px solid rgba(255, 255, 255, 0.95);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    transform: none !important;
+    animation: none !important;
+  }
+
+  .toothScannerFrame {
+    width: 30px;
+    height: 34px;
+    border-radius: 6px;
+  }
+
+  .laserScanline {
+    height: 1.5px;
+  }
+
+  .hudTag {
+    font-size: 0.55rem;
+    line-height: 1.1;
+  }
+
+  .hudValue {
+    font-size: 0.74rem;
+    line-height: 1.15;
+  }
+
+  .hudSub {
+    font-size: 0.6rem;
+    line-height: 1.1;
+  }
+
+  /* Pinned Micro Audio Equalizer - Bottom Right of Doctor */
+  .hudAudioWidget {
+    position: absolute;
+    bottom: -10px;
+    right: -12px;
+    z-index: 5;
+    background: rgba(6, 17, 24, 0.96);
+    color: #ffffff;
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    padding: 0.4rem 0.7rem;
+    border-radius: 12px;
+    box-shadow: 0 10px 28px rgba(0, 0, 0, 0.45);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    display: flex;
+    align-items: center;
+    gap: 0.55rem;
+    max-width: 190px;
+    transform: none !important;
+    animation: none !important;
+  }
+
+  .audioEqualizer {
+    height: 15px;
+    gap: 2px;
+  }
+
+  .eqBar {
+    width: 2.5px;
+  }
+
+  .audioTag {
+    font-size: 0.55rem;
+  }
+
+  .audioQuote {
+    font-size: 0.7rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 120px;
+  }
+
+  .audioAuthor {
+    font-size: 0.58rem;
+  }
+
+  /* 2. Text, Mode Controls & CTA follows directly underneath */
+  .heroLeft {
+    order: 2;
+    width: 100%;
+    align-items: center;
+  }
+
+  .heroBadge {
+    margin: 0 auto 0.75rem auto;
+    font-size: 0.68rem;
+    padding: 0.3rem 0.8rem;
+  }
+
+  .heroTitle {
+    font-size: clamp(1.8rem, 6.2vw, 2.4rem);
+    line-height: 1.15;
+    margin-bottom: 0.75rem;
+  }
+
+  .heroDesc {
+    font-size: 0.9rem;
+    line-height: 1.55;
+    margin-bottom: 1.25rem;
+    max-width: 520px;
+  }
+
+  .modeSwitcherContainer {
+    margin-bottom: 1.25rem;
+    width: 100%;
+  }
+
+  .modeSwitcherLabel {
+    font-size: 0.68rem;
+    margin-bottom: 0.4rem;
+  }
+
+  .modeChipsGroup {
+    display: flex;
+    width: 100%;
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.9);
+    padding: 3px;
+    border: 1px solid #e2e8f0;
+    gap: 3px;
+  }
+
+  .modeChip {
+    flex: 1;
+    padding: 0.45rem 0.25rem;
+    font-size: 0.72rem;
+    font-weight: 700;
+    justify-content: center;
+    gap: 0.3rem;
+    border-radius: 9px;
+  }
+
+  .heroActions {
+    flex-direction: column;
+    width: 100%;
+    gap: 0.65rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .primaryCtaBtn {
+    width: 100%;
+    padding: 0.85rem 1.5rem;
+    font-size: 0.92rem;
+    border-radius: 12px;
+  }
+
+  .secondaryPlayBtn {
+    width: 100%;
+    padding: 0.8rem 1.2rem;
+    font-size: 0.88rem;
+    border-radius: 12px;
+  }
+
+  .trustStrip {
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
+    padding-top: 1.25rem;
+    border-top: 1px solid rgba(226, 232, 240, 0.7);
+    width: 100%;
+  }
+
+  .trustReviewBlock {
+    align-items: center;
+  }
+
+  /* Funnel, Treatments, & Other Mobile Breakpoint Tweaks */
+  .funnelCard {
+    padding: 2.25rem 1.5rem;
+  }
+
+  .timeSlotsGrid {
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+  }
+
+  .funnelFormGrid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .comfortSection,
+  .financingSection,
+  .beforeAfterSection,
+  .treatmentsSection,
+  .bookingFunnelSection,
+  .faqSection {
+    margin: 4rem auto;
+    padding: 0 1.25rem;
+  }
+
+  .beforeAfterSection,
+  .bookingFunnelSection {
+    padding: 4rem 1.25rem;
+  }
+}
+
+/* Mobile Breakpoint (<= 640px) - Hide Nav CTA for ultra clean header */
+@media (max-width: 640px) {
+  .navCta {
+    display: none !important;
+  }
+}
+
+/* Compact Mobile Breakpoint (<= 480px) */
+@media (max-width: 480px) {
+  .topBarInner {
+    justify-content: center;
+    text-align: center;
+  }
+
+  .emergencyBadge span {
+    font-size: 0.7rem;
+  }
+
+  .brandName {
+    font-size: 1.05rem;
+  }
+
+  .brandSub {
+    font-size: 0.56rem;
+  }
+
+  .doctorCardPortal {
+    width: 180px;
+    height: 235px;
+  }
+
+  .hudScannerWidget {
+    left: -16px;
+    padding: 0.35rem 0.6rem;
+  }
+
+  .hudAudioWidget {
+    right: -16px;
+    padding: 0.35rem 0.6rem;
+    max-width: 175px;
+  }
+
+  .heroTitle {
+    font-size: 1.75rem;
+  }
+
+  .treatmentsGrid {
+    grid-template-columns: 1fr;
+    gap: 1.25rem;
+  }
+
+  .treatmentCard {
+    padding: 1.5rem;
+  }
+
+  .concernGrid {
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+  }
+
+  .funnelProgress {
+    gap: 0.75rem;
+  }
+
+  .stepLine {
+    width: 25px;
+  }
+
+  .stepDot {
+    width: 30px;
+    height: 30px;
+    font-size: 0.78rem;
+  }
+
+  .amenityList {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .comfortImageFrame {
+    height: 240px;
+  }
+
+  .financingCard {
+    padding: 1.75rem 1.1rem;
+    gap: 1.75rem;
+  }
+
+  .monthlyPaymentBox {
+    padding: 1.5rem 1rem;
+  }
+
+  .faqHeader {
+    padding: 1.1rem 1.25rem;
+    font-size: 0.95rem;
+  }
+
+  .faqContent {
+    padding: 0 1.25rem 1.1rem 1.25rem;
+    font-size: 0.88rem;
+  }
+
+  .footerInner {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+
+  .footerBottom {
+    flex-direction: column;
+    text-align: center;
+    gap: 0.5rem;
+  }
 }

@@ -2,6 +2,7 @@ import React from 'react';
 import { Pitch, TemplateId, TemplateMetadata, DynamicSection } from '@/types/pitch';
 import ApexAgencyTemplate from './ApexAgencyTemplate/ApexAgencyTemplate';
 import DentalMedicalTemplate from './DentalMedicalTemplate/DentalMedicalTemplate';
+import B2BWholesaleTemplate from './B2BWholesaleTemplate/B2BWholesaleTemplate';
 
 export interface TemplateComponentProps {
   pitch: Pitch;
@@ -18,6 +19,17 @@ export const TEMPLATES_LIST: TemplateMetadata[] = [
     accentColor: '#38bdf8',
     fontFamily: 'Playfair Display',
     darkBackground: false,
+  },
+  {
+    id: 'b2b-wholesale',
+    name: 'BharatB2B Global Manufacturing & Wholesale',
+    category: 'Manufacturing & B2B Wholesale',
+    badge: 'GLOBAL B2B / INDIAMART',
+    description: 'Dynamic wholesale & OEM export e-commerce portal with live MOQ tiered price calculator, multi-sector catalog, CAD spec sheet viewer, and 1-click RFQ dispatch.',
+    primaryColor: '#f59e0b',
+    accentColor: '#10b981',
+    fontFamily: 'Outfit',
+    darkBackground: true,
   },
   {
     id: 'apex-agency',
@@ -135,6 +147,7 @@ export const TEMPLATE_REGISTRY: Record<
   TemplateId,
   React.ComponentType<TemplateComponentProps>
 > = {
+  'b2b-wholesale': B2BWholesaleTemplate,
   'dental-medical': DentalMedicalTemplate,
   'apex-agency': ApexAgencyTemplate,
   'saas-minimal': ApexAgencyTemplate,
